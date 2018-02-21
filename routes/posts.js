@@ -1,9 +1,7 @@
 import auth from "./auth";
-
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
-var Post = mongoose.model('Post');
+import express from 'express';
+import Post from '../models/Post';
+const router = express.Router();
 
 const getUserPost = (req, res) => {
     const postId = req.param("id");
@@ -28,7 +26,7 @@ router.get('/new', auth, (req, res) => {
 
 });
 
-router.post('/create', auth, (req, res) => {
+router.post('/', auth, (req, res) => {
     const post = new Post();
 
     post.title = req.body.title;
@@ -42,29 +40,34 @@ router.post('/create', auth, (req, res) => {
     });
 });
 
-router.get('/:id/edit', auth, getUserPost);
-
-router.patch('/:id/update', auth, (req, res) => {
-    const newTitle = req.body.title;
-    const newText = req.body.text;
+router.patch('/:id', auth, (req, res) => {
+    const { title, text } = req.body.text;
 
     if (req.userId === req.decoded.id){
-        Post.update({_id: req.param("id"), author: req.decoded.id}, {title: newTitle, text: newText}).then( post => {
+        Post.update({_id: req.param("id"), author: req.decoded.id}, {title, text}).then( post => {
             res.json({success: true, message: "Post successfully updated"});
         }).catch( err => {
             res.json({success: false, message: err.message});
         });
     } else {
-        res.json({success: false, message: "Access denied."})
+        res.json({ success: false, message: "Access denied." });
     }
 });
 
-router.delete('/:id/destroy', auth, (req, res) => {
-    Post.remove({_id: req.param('id'), author: req.decoded.id}, {justOne: true}).then( () => {
-        res.json({success: true, message: "Post successfully deleted."});
+router.delete('/:id', auth, (req, res) => {
+    Post.findOne({ _id: req.param('id'), author: req.decoded.id }).then( post => {
+        if (post){
+            Post.remove({_id: req.param('id'), author: req.decoded.id}).then((s) => {
+                res.json({success: true, message: "Post successfully deleted."});
+            }).catch(err => {
+                res.json({success: false, message: err.message})
+            });
+        } else {
+            res.json({ success: false, message: "Post not found." });
+        }
     }).catch( err => {
-        res.json({success: false, message: err.message});
+        res.json({ success: false, message: err.message });
     });
 });
 
-module.exports = router;
+export default router;

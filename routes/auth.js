@@ -1,5 +1,5 @@
-var jwt = require('jsonwebtoken');
-var secret = require('../config').secret;
+import jwt from 'jsonwebtoken';
+import { secret } from '../config';
 
 export default (req, res, next) => {
     const token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -10,9 +10,10 @@ export default (req, res, next) => {
                 return res.json({ success: false, message: "Failed to authenticate token." });
             } else {
                 req.decoded = decoded;
+
                 next();
             }
-        })
+        });
     } else {
         return res.json({success: false, message: "No token"});
     }

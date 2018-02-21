@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var posts = require('./posts');
-var users = require('./users');
+import express from 'express';
+import posts from './posts';
+import users from './users';
+const router = express.Router();
 
 router.param("id", (req, res, next, id) => {
     req.userId = id;
