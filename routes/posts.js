@@ -50,9 +50,9 @@ router.patch('/:id/update', auth, (req, res) => {
 
     if (req.userId === req.decoded.id){
         Post.update({_id: req.param("id"), author: req.decoded.id}, {title: newTitle, text: newText}).then( post => {
-            res.json({post});
+            res.json({success: true, message: "Post successfully updated"});
         }).catch( err => {
-            res.json({success: false, message: err});
+            res.json({success: false, message: err.message});
         });
     } else {
         res.json({success: false, message: "Access denied."})
