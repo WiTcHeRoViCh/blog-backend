@@ -54,6 +54,7 @@ router.patch('/:id', auth, (req, res) => {
     }
 });
 
+
 router.delete('/:id', auth, (req, res) => {
     Post.findOne({ _id: req.param('id'), author: req.decoded.id }).then( post => {
         if (post){

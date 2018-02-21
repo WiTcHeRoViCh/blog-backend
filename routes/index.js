@@ -12,6 +12,7 @@ router.param("id", (req, res, next, id) => {
 router.use('/users', users);
 router.use('/users/:id/posts', posts);
 
+
 /* GET home page. */
 router.get('/', (req, res, next) => {
     res.json();

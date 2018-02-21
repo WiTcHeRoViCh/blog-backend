@@ -53,6 +53,7 @@ router.get('/:id',  (req, res) => {
     getUserInf(userId, res);
 });
 
+
 /* Sign up, login, logout path */
 router.post('/sign_up', (req, res) => {
     const user = new User();

@@ -18,4 +18,3 @@ export default (req, res, next) => {
         return res.json({success: false, message: "No token"});
     }
 };
-
