@@ -11,12 +11,5 @@ var UserSchema = new mongoose.Schema({
 
 UserSchema.plugin(uniqueValidator, {message: 'is already taken.'});
 
-UserSchema.methods.getJSONData = function() {
-    return {
-        id: this._id,
-        username: this.username,
-        password: this.password
-    }
-};
 
 mongoose.model('User', UserSchema);
